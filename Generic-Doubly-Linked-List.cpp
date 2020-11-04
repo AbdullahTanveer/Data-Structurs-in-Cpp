@@ -1,10 +1,10 @@
-// Data Structures - Generic Singly Linked List Implementation in C++
-// its a generic linked list. So you can define datatype that you want to store in list
+// Data Structures - Doubly Linked List Implementation in C++
+
 #include <iostream>
 
 using namespace std;
 
-// template type to make list generic
+
 template<class T>
 // List Class
 class List
@@ -15,10 +15,10 @@ class List
         {
             public:
                 T object;
-                Node *next;
+                Node *next, *prev;
         };
         int size; // for length of the list
-        Node *headNode, *lastcurrentNode, *currentNode;
+        Node *headNode, *currentNode, *tailNode;
     public:
         // constructor
         List()
@@ -27,7 +27,7 @@ class List
             headNode = new Node();
             headNode -> next = nullptr;
             currentNode = nullptr;
-            lastcurrentNode = nullptr;
+            tailNode = nullptr;
         }
         // destructor
         ~List(){ }
@@ -40,24 +40,32 @@ class List
             // set object 
             newNode -> object = obj;
             // check if list is empty
-            if(currentNode != nullptr)
+            if(tailNode != nullptr)
             {
                 // current is not null means list is not empty
                 // so we add items from currentNode
-                this -> currentNode = lastcurrentNode -> next; // make sure currentNode is last item of list
-                newNode -> next = currentNode -> next;
-                currentNode -> next = newNode;
-                lastcurrentNode = currentNode;
-                currentNode = newNode;
+                /*newNode -> next =(currentNode);
+                newNode -> prev =(currentNode -> prev);
+                (currentNode -> prev) -> next =(newNode);
+                currentNode -> prev =(newNode);
+                currentNode = newNode; */
+
+                newNode -> next = nullptr;
+                newNode -> prev = tailNode;
+                tailNode -> next = newNode;
+                tailNode = newNode;
+                currentNode = tailNode;
             }
             else
             {
                 // current is null means list is empty
                 // so we add item from headNode's next
                 newNode -> next = nullptr;
+                newNode -> prev = headNode; 
                 headNode -> next = newNode;
-                lastcurrentNode = headNode;
+                headNode -> prev = nullptr;
                 currentNode = newNode;
+                tailNode = currentNode;
             }
             size++;
             
@@ -92,28 +100,28 @@ class List
                 this -> currentNode = this -> currentNode -> next;
             }
         }
-
+        // display all item of list in reverse order
+        void Reverse()
+        {
+            // we will use currentnode to iterate throw items 
+            // but this time in reverse order using prev node
+            this -> currentNode = this -> tailNode;
+            while(this -> currentNode -> prev)
+            {
+                cout<<currentNode -> object<<" ";
+                this -> currentNode = this -> currentNode -> prev;
+            }
+        }
         // remove an item from list ( will remove from end of list )
         void Remove()
         {
             // remove an item at the end of list
             // then reset the currentNode, lastcurrentNode according to current items in list
-            currentNode = lastcurrentNode -> next; // make sure the currenNode is last node
-            delete currentNode; // delete current node
-            currentNode = lastcurrentNode; // move 1 step back
-            currentNode -> next = nullptr;
-            // for lastcurrentNode 
-            Node* pre = new Node();
-            pre = headNode;
-            while(pre)
-            {
-                if(currentNode == pre -> next)
-                    lastcurrentNode = pre;
-
-                pre = pre -> next;
-            }
+            currentNode = tailNode -> prev; // move currentnode to second last node
+            currentNode -> next =(nullptr); // set next to null, because we want to access last node anymore
+            delete tailNode; // delete the last node
+            tailNode = currentNode; // set last node to currentnode
             size--;
-            delete pre; // now delete this temp node 
         }
 
         // check length of list 
@@ -123,78 +131,88 @@ class List
         }
         
 };
-
-// demo generic linked list
+// demo of generic doubly linked list
 void DemoILL()
 {
-    cout<<"\n=============== Integer Type Singly Linked List ==============="<<endl;
-    List<int> l;
+    cout<<"\n=============== Integer Type Doubly Linked List ==============="<<endl;
+    // declaring a list
+    List<int> l1;
+
     // adding some items
-    for(int i = 0; i <= 10; i++)
-        l.Add(i);
+    for(int i = 1; i <= 10; i++)
+        l1.Add(i);
 
     // displaying all items from list using display function
     cout<<"\n-- Items added in List --"<<endl;
-    l.Display();
+    l1.Display();
+
+    // displaying all items from list in reverse order
+    cout<<"\n-- Reverse List --"<<endl;
+    l1.Reverse();
 
     // length of list
-    cout<<"\nLength of list : "<<l.Length()<<endl;
+    cout<<"\nLength of list : "<<l1.Length()<<endl;
 
     // removing some items from list
-    l.Remove();
-    l.Remove();
+    l1.Remove();
+    l1.Remove();
+    l1.Remove();
 
     // removed two items from list, now let's see how many items left in list
-    cout<<"\n-- After Removing some items -- "<<endl;
-    l.Display();
+    cout<<"\n-- After Removing an item -- "<<endl;
+    l1.Display();
 
     // length of list
-    cout<<"\nLength of list : "<<l.Length()<<endl;
+    cout<<"\nLength of list : "<<l1.Length()<<endl;
 
     // access list item by index
     cout<<"\n-- Access List item by index -- "<<endl;
-    cout<<"Item on Index(3) : "<<l.Index(3)<<endl;
+    cout<<"Item on Index(3) : "<<l1.Index(3)<<endl;
 }
 
 void DemoCLL()
 {
-    cout<<"\n=============== Char Type Singly Linked List ==============="<<endl;
-    List<char> l;
+    cout<<"\n=============== Char Type Doubly Linked List ==============="<<endl;
+    // declaring a list
+    List<char> l1;
+
     // adding some items
     char ch = 'a';
     for( ; ch <= 122; ch++)
-        l.Add(ch);
+        l1.Add(ch);
 
     // displaying all items from list using display function
     cout<<"\n-- Items added in List --"<<endl;
-    l.Display();
+    l1.Display();
+
+    // displaying all items from list in reverse order
+    cout<<"\n-- Reverse List --"<<endl;
+    l1.Reverse();
 
     // length of list
-    cout<<"\nLength of list : "<<l.Length()<<endl;
+    cout<<"\nLength of list : "<<l1.Length()<<endl;
 
     // removing some items from list
-    l.Remove();
-    l.Remove();
-    l.Remove();
-    l.Remove();
+    l1.Remove();
+    l1.Remove();
+    l1.Remove();
 
     // removed two items from list, now let's see how many items left in list
-    cout<<"\n-- After Removing some items -- "<<endl;
-    l.Display();
+    cout<<"\n-- After Removing an item -- "<<endl;
+    l1.Display();
 
     // length of list
-    cout<<"\nLength of list : "<<l.Length()<<endl;
+    cout<<"\nLength of list : "<<l1.Length()<<endl;
 
     // access list item by index
     cout<<"\n-- Access List item by index -- "<<endl;
-    cout<<"Item on Index(3) : "<<l.Index(3);
+    cout<<"Item on Index(3) : "<<l1.Index(3)<<endl;
 }
 int main()
 {
-    // demo of integer type linked list
+    // demo integer doubly linked list
     DemoILL();
-
-    // demo of char type linked list
+    // demo char doubly linked list
     DemoCLL();
 
     return 0;
