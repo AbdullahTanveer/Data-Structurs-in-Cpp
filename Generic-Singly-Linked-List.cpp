@@ -122,6 +122,14 @@ class List
             return this -> size;
         }
         
+        // check list is empty of not
+        bool IsEmpty()
+        {
+            if(size == 0)
+                return true;
+            else
+                return false;
+        }
 };
 
 // demo generic linked list
