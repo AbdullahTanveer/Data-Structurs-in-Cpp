@@ -42,10 +42,10 @@ class List
         // constructor
         List()
         {
-            size = 0;
+            size     = 0;
             headNode = new Node();
             headNode -> setNext(nullptr);
-            currentNode = nullptr;
+            currentNode     = nullptr;
             lastcurrentNode = nullptr;
         }
         // destructor
