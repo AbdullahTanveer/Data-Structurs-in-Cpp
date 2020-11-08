@@ -120,7 +120,7 @@ int main()
     cout<<"Enter a Number or an Operator as mentioned above"<<endl; 
     while(choice == 'y' || choice == 'Y')
     {
-        cout<<"Enter : "; cin>>ch;
+        cout<<"\nEnter : "; cin>>ch;
         if(ch >= 48 && ch <= 57) // filtering integers 0 - 9 using ASCII values
             s1.push((((int)ch)-((int)'0'))); // first convert char to int then push in stack
         else
