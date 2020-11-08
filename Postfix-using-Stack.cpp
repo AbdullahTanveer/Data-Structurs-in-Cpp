@@ -1,4 +1,4 @@
-// Data Structures | Postfix and Prefix Implementation using Stack C++
+// Data Structures | Postfix Implementation using Stack C++
 
 #include<iostream>
 
